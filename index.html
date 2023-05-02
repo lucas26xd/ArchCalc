@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" content="Lucas Santos">
+    <meta name="generator" content="VS Code">
+    <meta name="description" content="Cálculo financeiro aproximado da obra">
+    <meta name="keywords" content="Architecture, Engeneering">
+    <link rel="icon" type="image/x-icon" class="favicon" href="https://github.com/lucas26xd/Googolopoly/blob/master/Java/src/Imagens/monopoly.jpg?raw=true">
+    <title>Cálculo obra</title>
+    <!--Material Icons-->
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/3.6.95/css/materialdesignicons.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body::after {
+            content: "";
+            background: url('https://blog.cyrela.com.br/wp-content/uploads/2019/12/brown-brick-wall-207142.jpg');
+            opacity: 0.2;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            position: absolute;
+            z-index: -1;   
+        }
+
+        #eye {
+            display: none;
+        }
+
+        #eye + label:before {
+            content: "\f070"; 
+        }
+
+        #eye:checked + label:before {
+            content: "\f06e"; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container justify-content-center">
+        <h1 class="text-center">Parede</h1>
+        
+        <div class="border border-info">
+            <div class="row m-3">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="radiogroup1" id="muro" value="muro" checked onclick="bloqueiaRecebedores()">
+                    <label class="form-check-label" for="muro">Muro / Parede externa</label>
+                    <i class="ml-1 fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="Parede por padrão sem acabamentos"></i>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="radiogroup1" id="interna" value="interna" onclick="bloqueiaRecebedores()">
+                    <label class="form-check-label" for="interna">Parede interna</label>
+                    <i class="ml-1 fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="Parede com todos os acabamentos (reboco, tinta, etc)"></i>
+                </div>
+            </div>
+            <div class="row m-3">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="radiogroup2" id="s_reboco" value="s_reboco" checked onclick="bloqueiaRecebedores()">
+                    <label class="form-check-label" for="s_reboco">Sem reboco</label>
+                    <i class="ml-1 fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="Parede sem reboco"></i>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="radiogroup2" id="c_reboco" value="c_reboco" onclick="bloqueiaRecebedores()">
+                    <label class="form-check-label" for="c_reboco">Sem reboco</label>
+                    <i class="ml-1 fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="Parede com reboco em apenas 1 dos lados"></i>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="radiogroup2" id="c2_reboco" value="c2_reboco" onclick="bloqueiaRecebedores()">
+                    <label class="form-check-label" for="c2_reboco">Reboco em ambos os lados</label>
+                    <i class="ml-1 fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="Parede com reboco"></i>
+                </div>
+            </div>
+            <div class="row m-3">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="radiogroup3" id="s_tinta" value="s_tinta" checked onclick="bloqueiaRecebedores()">
+                    <label class="form-check-label" for="s_tinta">Sem tinta</label>
+                    <i class="ml-1 fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="Parede sem tinta"></i>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="radiogroup3" id="c_tinta" value="c_tinta" onclick="bloqueiaRecebedores()">
+                    <label class="form-check-label" for="c_tinta">Com tinta</label>
+                    <i class="ml-1 fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="Parede com todos os acabamentos (reboco, tinta, etc)"></i>
+                </div>
+            </div>
+            <div class="row m-3">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="percentual" id="percentual" value="percentual" checked onclick="bloqueiaRecebedores()">
+                    <label class="form-check-label" for="percentual">Percentual de perda</label>
+                    <i class="ml-1 fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="Adicionar em cima do cálculo final 10% para contornar possíveis perdas"></i>
+                </div>
+            </div>
+        </div>
+        <div class="row m-3">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="text" name="area" id="area" placeholder="Área em m²">
+                <button type="button" onclick="acao()" class="btn btn-primary mb-2 fa fa-calculator">  Calcular</button>
+            </div>
+        </div>
+
+        <div class="result row text-center">
+            <div class="col-9">
+                <h3>Resultados</h3>
+            </div>
+            <div class="col-1">
+                <input class="form-check-input" type="checkbox" id="eye" checked onclick="showCoeffs()">
+                <label class="form-check-label fa ml-5 h5" for="eye" title="Visualizar/Esconder coeficientes"></label>
+            </div>
+            <div class="col-2">
+                <button type="button" onclick="imprimir()" class="btn btn-success mb-2 fa fa-print">  Imprimir</button>
+            </div>            
+        </div>
+        
+        <div class="result border border-info mt-2">
+            <h4>Materiais</h4>
+            <table class="table" id="tab-materiais">
+                <thead>
+                  <tr>
+                    <th scope="col" class="materiais">Materiais</th>
+                    <th scope="col" class="coeficientes">Coeficientes</th>
+                    <th scope="col" class="valores">Valor base</th>
+                    <th scope="col" class="qtd">Quantidade</th>
+                    <th scope="col" class="total">Valor Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="materiais" id="material1">Tijolos</td>
+                    <td class="coeficientes" id="coef1">100,4</td>
+                    <td class="valores" id="valor1">R$ 0,70</td>
+                    <td class="qtd" id="qtd1">450</td>
+                    <td class="total" id="total1">R$ 315,00</td>
+                  </tr>
+                  <tr>
+                    <td class="materiais" id="material2">Areia</td>
+                    <td class="coeficientes" id="coef2">54</td>
+                    <td class="valores" id="valor2">R$ 450</td>
+                    <td class="qtd" id="qtd2">1,20</td>
+                    <td class="total" id="total2">R$ 540,00</td>
+                  </tr>
+                  <tr>
+                    <td class="materiais" id="material3">Cimento</td>
+                    <td class="coeficientes" id="coef3">27</td>
+                    <td class="valores" id="valor3">R$ 28,00</td>
+                    <td class="qtd" id="qtd3">10</td>
+                    <td class="total" id="total3">R$ 280,00</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th scope="col" class="materiais"></th>
+                    <th scope="col" class="coeficientes">181,40</th>
+                    <th scope="col" class="valores">R$ 478,70</th>
+                    <th scope="col" class="qtd">461,20</th>
+                    <th scope="col" class="total">R$ 1.135,00</th>
+                  </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <div class="result border border-info mt-2">
+            <h4>Acabamentos</h4>
+            <table class="table" id="tab-acabamentos">
+                <thead>
+                  <tr>
+                    <th scope="col" class="materiais">Materiais</th>
+                    <th scope="col" class="coeficientes">Coeficientes</th>
+                    <th scope="col" class="valores">Valor base</th>
+                    <th scope="col" class="qtd">Quantidade</th>
+                    <th scope="col" class="total">Valor Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="materiais" id="material1">Tijolos</td>
+                    <td class="coeficientes" id="coef1">100,4</td>
+                    <td class="valores" id="valor1">R$ 0,70</td>
+                    <td class="qtd" id="qtd1">450</td>
+                    <td class="total" id="total1">R$ 315,00</td>
+                  </tr>
+                  <tr>
+                    <td class="materiais" id="material2">Areia</td>
+                    <td class="coeficientes" id="coef2">54</td>
+                    <td class="valores" id="valor2">R$ 450</td>
+                    <td class="qtd" id="qtd2">1,20</td>
+                    <td class="total" id="total2">R$ 540,00</td>
+                  </tr>
+                  <tr>
+                    <td class="materiais" id="material3">Cimento</td>
+                    <td class="coeficientes" id="coef3">27</td>
+                    <td class="valores" id="valor3">R$ 28,00</td>
+                    <td class="qtd" id="qtd3">10</td>
+                    <td class="total" id="total3">R$ 280,00</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th scope="col" class="materiais"></th>
+                    <th scope="col" class="coeficientes">181,40</th>
+                    <th scope="col" class="valores">R$ 478,70</th>
+                    <th scope="col" class="qtd">461,20</th>
+                    <th scope="col" class="total">R$ 1.135,00</th>
+                  </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!--Bootstrap JavaScript-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.result').hide();
+        showCoeffs();
+
+        function acao(){
+            $('.result').show()
+        }
+
+        function showCoeffs(){
+            if($('.coeficientes').attr('style')){
+                $('.coeficientes').removeAttr('style');
+                $('.valores').removeAttr('style');
+            } else {
+                $('.coeficientes').attr('style', 'display:none');
+                $('.valores').attr('style', 'display:none');
+            }
+        }
+    </script>
+</body>
+</html>
